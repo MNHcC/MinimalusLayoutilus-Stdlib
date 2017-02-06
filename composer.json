@@ -1,5 +1,5 @@
 {
-    "name": "mnhcc/minimaluslayoutilus_stdlib",
+    "name": "MNHcC/MinimalusLayoutilus-stdlib",
     "description": "main files for MinimalusLayoutilus",
     "require-dev": {
         "phpunit/phpunit": "^6.0"
