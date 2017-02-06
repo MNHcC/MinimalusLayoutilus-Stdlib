@@ -2,7 +2,7 @@
 
 namespace MNHcC\MinimalusLayoutilus\StdLib {
 
-    interface MNHcCArrayInterface {
+    interface MinimalusLayoutilusArrayInterface {
 
         /**
          * @return array a copy of the values as array

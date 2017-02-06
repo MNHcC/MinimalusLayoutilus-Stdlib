@@ -7,7 +7,7 @@ namespace MNHcC\MinimalusLayoutilus\StdLib {
      * @author Michael Hegenbarth (carschrotter)
      * @package MinimalusLayoutilus	 
      */
-    interface MNHcCInterface {
+    interface MinimalusLayoutilusInterface {
 
         const secure = 'Ay0keRT1l8';
 
