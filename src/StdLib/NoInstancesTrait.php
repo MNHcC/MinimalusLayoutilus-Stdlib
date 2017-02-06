@@ -1,7 +1,7 @@
 <?php
 
 namespace MNHcC\MinimalusLayoutilus\StdLib {
-
+    use MNHcC\MinimalusLayoutilus\StdLib\Exception;
 
 
     /**
@@ -17,22 +17,12 @@ namespace MNHcC\MinimalusLayoutilus\StdLib {
 
         use InstancesTrait;
 
-//	protected $_instanceID;
-//	
-//	public function getInstanceID() {
-//	    return $this->_instanceID;
-//	}
-//
-//	public function setInstanceID($instanceID) {
-//	    $this->_instanceID = $instanceID;
-//	}
-
         /**
          * 
          * @param string $instance the id of 
          * @return static
          */
-        public static function &getInstance($instance = self::DEFAULTINSTANCE, $t = null) {
+        static public function &getInstance($instance = self::DEFAULTINSTANCE, $t = null) {
             $class = classes\Bootstrap::getOverloadedClass(get_called_class());
             $reflection = new classes\ReflectionClass($class);
             if ($instance == self::DEFAULTINSTANCE) {
@@ -42,8 +32,8 @@ namespace MNHcC\MinimalusLayoutilus\StdLib {
             return $obj;
         }
 
-        public static function isInit() {
-            throw new Exception('Call to undefined method ' . $this->getClass() . '::' . __FUNCTION__ . '()', ExceptionInterface::noMethodImplement);
+        static public function isInit() {
+            throw new Exception\Exception('Call to undefined method ' . $this->getClass() . '::' . __FUNCTION__ . '()', Exception\ExceptionInterface::noMethodImplement);
         }
 
     }

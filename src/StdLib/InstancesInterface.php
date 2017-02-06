@@ -16,7 +16,6 @@ namespace MNHcC\MinimalusLayoutilus\StdLib {
         /**
          * return string <p>the id or instance name from getInstance init</p>
          */
-
         public function getInstanceID();
 
         /**
@@ -24,13 +23,29 @@ namespace MNHcC\MinimalusLayoutilus\StdLib {
          */
         public function setInstanceID($instanceID);
 
-        public static function &getInstanceArgs($instance = self::DEFAULTINSTANCE); //,  $args = [], $override = self::INSTANCE_NOT_OVERIDE);
+        /**
+         * 
+         * @param string $instance (optional) the instance key
+         * @return self
+         */
+        static public function &getInstanceArgs($instance = self::DEFAULTINSTANCE); //,  $args = [], $override = self::INSTANCE_NOT_OVERIDE);
 
-        public static function &getInstance($instance = self::DEFAULTINSTANCE); //, $override = self::INSTANCE_NOT_OVERIDE);
+        /**
+         * 
+         * @param string $instance the instance key
+         */
+        static public function &getInstance($instance = self::DEFAULTINSTANCE); //, $override = self::INSTANCE_NOT_OVERIDE);
 
-        public static function getInstances();
+        /**
+         * @return self[]
+         */
+        static public function getInstances();
 
-        public static function issetInstance($instance = self::DEFAULTINSTANCE);
+        /**
+         * 
+         * @param string $instance (optional) the instance key
+         */
+        static public function issetInstance($instance = self::DEFAULTINSTANCE);
 
         /**
          * Is a object whit 'default' keyword createt also init

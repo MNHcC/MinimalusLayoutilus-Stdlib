@@ -1,7 +1,8 @@
 <?php
 
 namespace MNHcC\MinimalusLayoutilus\StdLib;
-    
+
+    use MNHcC\MinimalusLayoutilus\StdLib\Exception;
     /**
      * Implementation for the Instances interface 
      * <p>
@@ -38,21 +39,20 @@ namespace MNHcC\MinimalusLayoutilus\StdLib;
 	    $this->_instanceID = $instanceID;
 	}
 	
-	public function issetInstance($instance = self::DEFAULTINSTANCE) {
-	    if(classes\ArrayHelper::keyExists($instance, self::$_instances)) {
+	static public function issetInstance($instance = self::DEFAULTINSTANCE) {
+	    if(Helper\AbstractArrayHelper::keyExists($instance, self::$_instances)) {
 		return ( \is_object(self::$_instances[$instance]) && (self::$_instances[$instance] instanceof self) );
 	    } 
 	    return false;
 	}
-//	
-//	public function __destruct() {
-//	   if(classes\ArrayHelper::keyExists(self::$this->_instanceID, self::$_instances) 
-//		   && self::$_instances[self::$this->_instanceID] instanceof self){ 
-//	       unset(self::$_instances[$this->_instanceID]); 
-//	   }
-//	}
-//	
-	protected static function setInstance($instance, $self) {
+
+        /**
+         * 
+         * @param type $instance
+         * @param self $self
+         * @throws Exception
+         */
+	static protected function setInstance($instance, $self) {
 	    if($self instanceof self){
 		self::$_instances[$instance] = $self;
 	    } else {
@@ -62,18 +62,18 @@ namespace MNHcC\MinimalusLayoutilus\StdLib;
 	
 	/**
 	 * 
-	 * @param string $instance <p>Instance id/name</p>
+	 * @param string $instance (optional) <p>Instance id/name</p>
 	 * @return static
 	 */
-	public static function &getInstance($instance = self::DEFAULTINSTANCE, $override = self::INSTANCE_NOT_OVERIDE) {
+	static public function &getInstance($instance = self::DEFAULTINSTANCE, $override = self::INSTANCE_NOT_OVERIDE) {
 	    if ( (!\key_exists($instance, self::$_instances)) || ($override == self::INSTANCE_OVERIDE) ) {
-		$class = classes\Bootstrap::getOverloadedClass(get_called_class());
+		$class = Bootstrap::getOverloadedClass(get_called_class());
 		$args = func_get_args();
-		if (classes\ArrayHelper::count($args) > 0) {
-		    classes\ArrayHelper::shift($args);
-		    if (classes\ArrayHelper::keyExists(0, $args)) {
-			if (classes\ArrayHelper::in($args[0], [self::INSTANCE_OVERIDE, self::INSTANCE_NOT_OVERIDE])) {
-			    classes\ArrayHelper::shift($args);
+		if (Helper\AbstractArrayHelper::count($args) > 0) {
+		    Helper\AbstractArrayHelper::shift($args);
+		    if (Helper\AbstractArrayHelper::keyExists(0, $args)) {
+			if (Helper\AbstractArrayHelper::in($args[0], [self::INSTANCE_OVERIDE, self::INSTANCE_NOT_OVERIDE])) {
+			    Helper\AbstractArrayHelper::shift($args);
 			} else {
 			    classes\Error::triggerError('Pleas use as the secont argument the \\mnhcc\\ml\\interfaces\\Instances::INSTANCE_... constants', classes\Error::DEPRECATED);
 			}
@@ -87,10 +87,16 @@ namespace MNHcC\MinimalusLayoutilus\StdLib;
 	    }
 	    return self::$_instances[$instance];
 	}
-	
-	public static function &getInstanceArgs($instance = self::DEFAULTINSTANCE,  $args = [], $override = self::INSTANCE_NOT_OVERIDE) {
-	    $args = classes\ArrayHelper::addBefore($args, $override);
-	    $args = classes\ArrayHelper::addBefore($args, $instance);
+
+        /**
+         * @param string $instance (optional) the instance key
+         * @param type $args
+         * @param type $override
+         * @return static
+         */
+	static public function &getInstanceArgs($instance = self::DEFAULTINSTANCE,  $args = [], $override = self::INSTANCE_NOT_OVERIDE) {
+	    $args = Helper\AbstractArrayHelper::addBefore($args, $override);
+	    $args = Helper\AbstractArrayHelper::addBefore($args, $instance);
 	    /**
 	     * @todo self keyword on ReflectionClass
 	     */
@@ -112,9 +118,9 @@ namespace MNHcC\MinimalusLayoutilus\StdLib;
 	}
 	
 	/**
-	 * @return array <p>array of instances from static</p>
+	 * @return static[] <p>array of instances from static</p>
 	 */
-	public static function &getInstances() {
+	static public function &getInstances() {
 	    return self::$_instances;
 	}
 
