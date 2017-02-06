@@ -1,8 +1,7 @@
 <?php
 
 namespace MNHcC\MinimalusLayoutilus\StdLib;
-
-    use MNHcC\MinimalusLayoutilus\StdLib\Exception;
+    
     /**
      * Implementation for the Instances interface 
      * <p>
@@ -50,13 +49,13 @@ namespace MNHcC\MinimalusLayoutilus\StdLib;
          * 
          * @param type $instance
          * @param self $self
-         * @throws Exception
+         * @throws Exception\Exception
          */
 	static protected function setInstance($instance, $self) {
 	    if($self instanceof self){
 		self::$_instances[$instance] = $self;
 	    } else {
-		throw new Exception(__class_.'::setInstance() only accept objects from type '.__class_);
+		throw new Exception\Exception(__class_.'::setInstance() only accept objects from type '.__class_);
 	    }
 	}
 	
@@ -75,11 +74,11 @@ namespace MNHcC\MinimalusLayoutilus\StdLib;
 			if (Helper\AbstractArrayHelper::in($args[0], [self::INSTANCE_OVERIDE, self::INSTANCE_NOT_OVERIDE])) {
 			    Helper\AbstractArrayHelper::shift($args);
 			} else {
-			    classes\Error::triggerError('Pleas use as the secont argument the \\mnhcc\\ml\\interfaces\\Instances::INSTANCE_... constants', classes\Error::DEPRECATED);
+			    Error::triggerError('Pleas use as the secont argument the \\mnhcc\\ml\\interfaces\\Instances::INSTANCE_... constants', Error::DEPRECATED);
 			}
 		    }
 		}
-		self::$_instances[$instance] = (new classes\ReflectionClass($class))->newInstanceArgs($args);
+		self::$_instances[$instance] = (new \ReflectionClass($class))->newInstanceArgs($args);
 		self::$_instances[$instance]->setInstanceID($instance);
 		if ($instance == self::DEFAULTINSTANCE) {
 		    self::$init = true;
