@@ -1,6 +1,6 @@
 {
-    "name": "MNHcC/MinimalusLayoutilus-stdlib",
-    "description": "main files for MinimalusLayoutilus",
+    "name": "MNHcC/MinimalusLayoutilus-Stdlib",
+    "description": "standard lib files for MinimalusLayoutilus",
     "require-dev": {
         "phpunit/phpunit": "^5.7"
     },
