@@ -11,7 +11,7 @@ namespace MNHcC\MinimalusLayoutilus\StdLib\Exception;
      * @author Michael Hegenbarth (carschrotter)
      * @package MinimalusLayoutilus	 
      */
-    interface ExceptionInterface {
+    interface ExceptionInterface extends \JsonSerializable {
 
         const noMethodImplement = 7;
         const noStaticMethodImplement = 14;
