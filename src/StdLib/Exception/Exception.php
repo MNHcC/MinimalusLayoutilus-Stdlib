@@ -16,5 +16,5 @@ use \Exception as BaseException;
  * @author Michael Hegenbarth <mnh@mn-hegenbarth.de>
  */
 class Exception extends BaseException implements ExceptionInterface {
-    //put your code here
+    use ExceptionTrait;
 }

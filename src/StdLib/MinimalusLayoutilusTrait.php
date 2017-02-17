@@ -2,6 +2,9 @@
 
 namespace MNHcC\MinimalusLayoutilus\StdLib {
 
+    use MNHcC\MinimalusLayoutilus\StdLib\Exception\Exception;
+    use MNHcC\MinimalusLayoutilus\Reflection\Exception\ExceptionInterface;
+    
     /**
      *
      * @author Michael Hegenbarth (carschrotter)

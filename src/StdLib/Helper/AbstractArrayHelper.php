@@ -21,6 +21,8 @@
 
 namespace MNHcC\MinimalusLayoutilus\StdLib\Helper  {
     
+    use ArrayAccess;
+    use Traversable;
     use MNHcC\MinimalusLayoutilus\StdLib;
     use MNHcC\MinimalusLayoutilus\StdLib\MinimalusLayoutilusArrayInterface as MLArray;
 
@@ -61,7 +63,7 @@ namespace MNHcC\MinimalusLayoutilus\StdLib\Helper  {
 	}
 
 	static public function implode($pieces, $glue = '') {
-	    return \implode($glue, $pieces);
+	    return \implode($glue, static::toArray($pieces));
 	}
 	
 	static public function explode($delimiter, $string, $limit = null) {
@@ -70,7 +72,6 @@ namespace MNHcC\MinimalusLayoutilus\StdLib\Helper  {
 	}
 	
 	/**
-	 * (PHP 4, PHP 5)<br/>
 	 * Shift an element off the beginning of array
 	 * @param array $array <p>
 	 * The input array.
@@ -79,7 +80,7 @@ namespace MNHcC\MinimalusLayoutilus\StdLib\Helper  {
 	 * The count of repetition.
 	 * </p>
 	 * @return mixed the shifted value, or <b>NULL</b> if <i>array</i> is
-	 * empty or is not an array.
+	 * empty or is not an array. is $repetition a count get a array of shifted values
 	 */
 	static public function shift(&$array, $repetition = null) {
 	    if($repetition == null) {
@@ -104,12 +105,12 @@ namespace MNHcC\MinimalusLayoutilus\StdLib\Helper  {
 
 	static public function in($needle, $haystack, $strict = false, $recrisiv = false) {
 	    if(!self::isArray($haystack)) {		
-		throw new Exception\InvalidArgumentException(Exception\InvalidArgumentException::TYPE_ARRAY);
+		throw new Exception\WrongTypeException(Exception\WrongTypeException::TYPE_ARRAY);
 	    }
 	    if ($recrisiv == true) {
 		return self::inRecursive($needle, $haystack, $strict);
 	    }
-	    return \in_array($needle, $haystack, $strict);
+	    return \in_array($needle, static::toArray($haystack), $strict);
 	}
 
 	static public function inRecursive($needle, &$haystack, $strict = false) {
@@ -125,25 +126,47 @@ namespace MNHcC\MinimalusLayoutilus\StdLib\Helper  {
 		}
 		$answer = ($answer || $check);
 	    };
-	    \array_walk_recursive($haystack, $func);
+	    \array_walk_recursive(static::toArray($haystack), $func);
 	    return $answer;
 	}
 
+        /**
+         * 
+         * @param mixed $val
+         * @return bool
+         */
 	static public function isArray($val) {
-	    if (\is_object($val)) {
-		return ($val instanceof \ArrayAccess) ? 1 : false ;
-	    }
-	    return (bool) \is_array($val);
+	    return static::hasArrayObjectInterfaces($val) || \is_array($val);
 	}
+        
+        /**
+         * 
+         * @param mixed $obj
+         * @return bool
+         */
+        static public function hasArrayObjectInterfaces($obj) {
+            return (is_object($obj) && $obj instanceof ArrayAccess && $obj instanceof Traversable);
+        }
 	
+        /**
+         * 
+         * @param mixed $val
+         * @return bool
+         */
 	static public function isMNHcCArray($val) {
 	    return (is_object($val) && $val instanceof MLArray);
 	}
 
+        /**
+         * 
+         * @param mixed $val
+         * @param bool $recrusiv
+         * @return array
+         */
 	static public function toArray($val, $recrusiv = false) {
 	    if (self::isArray($val)) {
-		if (self::isArray($val) == 1) {
-		    if (self::isMNHcCArray($val) || ($val instanceof \ArrayObject)) {
+		if (static::hasArrayObjectInterfaces($val)) {
+		    if (static::isMNHcCArray($val) || \method_exists($val, 'getArrayCopy')) {
 			$val = $val->getArrayCopy();
 		    } else {
 			$val = (array) $val;
@@ -152,15 +175,23 @@ namespace MNHcC\MinimalusLayoutilus\StdLib\Helper  {
 		if (!$recrusiv) {
 		    return $val;
 		} else {
-		    return self::each($val, function($key, $val, $array) use($recrusiv) {
-				return self::toArray($val, $recrusiv);
-			    });
+		    return self::each($val, 
+                        function($key, $val, $array){
+                            return static::toArray($val, true);
+                        });
 		}
 	    } else {
 		return [$val];
 	    }
 	}
 
+        /**
+         * 
+         * @param array $array
+         * @param callable $func
+         * @param array $return
+         * @return array
+         */
 	static public function each(&$array, callable $func, &$return = null) {
 	    $return = [];
 	    foreach ($array as $key => &$val) {
